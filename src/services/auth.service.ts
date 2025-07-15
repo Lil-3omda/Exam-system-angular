@@ -15,18 +15,22 @@ export class AuthService {
   }
 
   private initializeAuth(): void {
-    const token = localStorage.getItem('token');
-    const user = localStorage.getItem('user');
-    if (token && user) {
-      try {
-        const userData = JSON.parse(user);
-        this.currentUserSubject.next(userData);
-      } catch (error) {
-        console.error('Error parsing user data:', error);
-        this.logout();
-      }
+  const token = localStorage.getItem('token');
+  const user = localStorage.getItem('user');
+
+  if (token && user && user !== 'undefined') {
+    try {
+      const parsedUser = JSON.parse(user);
+      this.currentUserSubject.next(parsedUser);
+    } catch (e) {
+      console.error('Failed to parse user from localStorage:', e);
+      this.logout();
     }
+  } else {
+    this.logout();
   }
+}
+
 
   private isTokenExpired(token: string): boolean {
     try {
@@ -39,14 +43,21 @@ export class AuthService {
   }
 
   login(credentials: LoginDto): Observable<AuthResponse> {
-    return this.apiService.post<AuthResponse>('/Auth/login', credentials).pipe(
-      tap(response => {
-        localStorage.setItem('token', response.token);
-        localStorage.setItem('user', JSON.stringify(response.user));
-        this.currentUserSubject.next(response.user);
-      })
-    );
-  }
+  return this.apiService.post<AuthResponse>('/Auth/login', credentials).pipe(
+    tap(response => {
+      console.log('Login Response:', response); // ✅ Log response
+
+      if (!response.user) {
+        console.error('❌ Login response missing "user" object');
+      }
+
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('user', JSON.stringify(response.user));
+      this.currentUserSubject.next(response.user);
+    })
+  );
+}
+
 
   register(userData: RegisterDto): Observable<AuthResponse> {
     return this.apiService.post<AuthResponse>('/Auth/register', userData).pipe(

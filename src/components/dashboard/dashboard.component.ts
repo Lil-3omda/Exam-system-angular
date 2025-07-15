@@ -21,15 +21,33 @@ import { Exam, StudentExams } from '../../models/exam.models';
           </a>
           <div class="navbar-nav ms-auto d-flex align-items-center">
             <div class="dropdown me-3">
-              <button class="btn btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                <i class="bi bi-person-circle me-2"></i>
-                {{ currentUser?.userName }}
+              <button 
+                class="btn btn-light text-dark dropdown-toggle d-flex align-items-center px-3 py-2 rounded-pill shadow-sm" 
+                type="button" 
+                id="userDropdown" 
+                data-bs-toggle="dropdown" 
+                aria-expanded="false"
+              >
+                <i class="bi bi-person-circle me-2 fs-5"></i>
+                <span class="fw-semibold">{{ currentUser?.userName }}</span>
               </button>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a></li>
-                <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
+              <ul class="dropdown-menu dropdown-menu-end shadow-sm animate__animated animate__fadeIn" aria-labelledby="userDropdown">
+                <li>
+                  <a class="dropdown-item d-flex align-items-center" href="#">
+                    <i class="bi bi-person me-2 text-primary"></i> Profile
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item d-flex align-items-center" href="#">
+                    <i class="bi bi-gear me-2 text-secondary"></i> Settings
+                  </a>
+                </li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" (click)="logout()"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                <li>
+                  <a class="dropdown-item d-flex align-items-center text-danger" style="cursor: pointer;" (click)="logout()">
+                    <i class="bi bi-box-arrow-right me-2"></i> Logout
+                  </a>
+                </li>
               </ul>
             </div>
             <span class="badge bg-light text-dark px-3 py-2 me-3">

@@ -128,8 +128,9 @@ export class TakeExamComponent implements OnInit {
   loadExam(examId: number): void {
     this.examService.getExamById(examId).subscribe({
       next: (exam) => {
+        console.log('Exam loaded:', exam); // ← Check this!
         this.exam = exam;
-        this.timeRemaining = exam.duration * 60; // Convert to seconds
+        this.timeRemaining = exam.duration * 60;
         this.setupForm();
         this.startTimer();
       },
